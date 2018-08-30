@@ -5,4 +5,7 @@ require 'ffaker'
   speaker.save
 end
 
+meeting = Meeting.new(title: "meating", agenda: "in this meeting we will be quiet with each other", time: "3")
+meeting.save
+
 
