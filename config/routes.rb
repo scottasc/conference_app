@@ -1,8 +1,15 @@
 Rails.application.routes.draw do
   namespace :api do
-    get "/one_speaker_url" => 'speakers#one_speaker_action'
-    get "/first_meeting_url" => 'meetings#first_meeting_action'
-    get "/two_meetings_url" => 'meetings#two_meetings_action'
-    get "/all_meetings_url" => 'meetings#all_meetings_action'
+    get "/speakers" => 'speakers#index'
+    post "/speakers" => 'speakers#create'
+    get "/speakers/:id" => 'speakers#show'
+    patch "/speakers/:id" => 'speakers#update'
+    delete "/speakers/:id" => 'speakers#destroy'
+
+    get "/meetings" => 'meetings#index'
+    post "/meetings" => 'meetings#create'
+    get "/meetings/:id" => 'meetings#show'
+    patch "/meetings/:id" => 'meetings#update'
+    delete "/meetings/:id" => 'meetings#destroy'
   end
 end
