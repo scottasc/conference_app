@@ -2,6 +2,20 @@ class Api::MeetingsController < ApplicationController
 
   def index
     @meetings = Meeting.all
+    sort_attribute = params[:sort]
+    sort_order = params[:sort_order]
+    search_term = params[:search]
+
+    if search_term
+      @meetings = @meetings.where('title iLIKE ? OR agenda iLIKE ?', "%#{search_term}%", "%#{search_term}%")
+    end
+
+    if sort_attribute && sort_order
+      @meetings = @meetings.order(sort_attribute => sort_order)
+    elsif sort_attribute
+      @meetings = @meetings.order(sort_attribute)
+    end
+
     render 'index.json.jbuilder'
   end
 
@@ -13,8 +27,13 @@ class Api::MeetingsController < ApplicationController
                           location: params[:location],
                           remote: params[:remote]
                           )
-    @meeting.save
-    render 'show.json.jbuilder'
+
+    if @meeting.save
+      render 'show.json.jbuilder'
+    elsif 
+      render json: {errors: @meeting.errors.full_messages}, status: :unprocessable_entity
+    end
+
   end
 
   def show
@@ -29,7 +48,13 @@ class Api::MeetingsController < ApplicationController
     @meeting.time = params[:time] || @meeting.time
     @meeting.location = params[:location] || @meeting.location
     @meeting.remote = params[:remote] || @meeting.remote
-    render 'show.json.jbuilder'
+    
+    if @meeting.save
+      render 'show.json.jbuilder'
+    elsif 
+      render json: {errors: @meeting.errors.full_messages}, status: :unprocessable_entity
+    end
+
   end
 
   def destroy

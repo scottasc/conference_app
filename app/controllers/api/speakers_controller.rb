@@ -2,6 +2,20 @@ class Api::SpeakersController < ApplicationController
 
   def index
     @speakers = Speaker.all
+    sort_attribute = params[:sort]
+    sort_order = params[:sort_order]
+    search_term = params[:search]
+
+    if search_term
+      @speakers = @speakers.where("first_name iLIKE ? OR last_name iLIKE ?", "%#{search_term}%", "%#{search_term}%")
+    end
+
+    if sort_attribute && sort_order
+      @speakers = @speakers.order(sort_attribute => sort_order)
+    elsif sort_attribute
+      @speakers = @speakers.order(sort_attribute)
+    end
+
     render 'index.json.jbuilder'
   end
 
@@ -13,8 +27,12 @@ class Api::SpeakersController < ApplicationController
                           age: params[:age],
                           gender: params[:gender]
                           )
-    @speaker.save
-    render 'show.json.jbuilder'
+    
+    if @speaker.save
+      render 'show.json.jbuilder'
+    else
+      render json: {errors: @speaker.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -29,7 +47,12 @@ class Api::SpeakersController < ApplicationController
     @speaker.email = params[:email] || @speaker.email
     @speaker.age = params[:age] || @speaker.age
     @speaker.gender = params[:gender] || @speaker.gender
-    render 'show.json.jbuilder'
+
+    if @speaker.save
+      render 'show.json.jbuilder'
+    else
+      render json: {errors: @speaker.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def destroy

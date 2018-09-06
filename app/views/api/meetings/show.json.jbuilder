@@ -1,1 +1,1 @@
-json.partial! @speaker, partial: "speaker", as: :speaker
+json.partial! @meeting, partial: "meeting", as: :meeting
