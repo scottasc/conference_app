@@ -1,7 +1,7 @@
 class Api::MeetingsController < ApplicationController
 
   def index
-    @meetings = Meeting.all
+    @meetings = Meeting.where(remote: true)
     sort_attribute = params[:sort]
     sort_order = params[:sort_order]
     search_term = params[:search]

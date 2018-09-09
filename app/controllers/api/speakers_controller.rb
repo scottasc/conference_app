@@ -1,7 +1,7 @@
 class Api::SpeakersController < ApplicationController
 
   def index
-    @speakers = Speaker.all
+    @speakers = Speaker.order('age asc')
     sort_attribute = params[:sort]
     sort_order = params[:sort_order]
     search_term = params[:search]
