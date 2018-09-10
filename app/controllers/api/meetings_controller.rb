@@ -1,7 +1,7 @@
 class Api::MeetingsController < ApplicationController
 
   def index
-    @meetings = Meeting.where(remote: true)
+    @meetings = Meeting.all
     sort_attribute = params[:sort]
     sort_order = params[:sort_order]
     search_term = params[:search]
@@ -24,7 +24,8 @@ class Api::MeetingsController < ApplicationController
                           title: params[:title],
                           agenda: params[:agenda],
                           time: params[:time],
-                          location: params[:location]
+                          location: params[:location],
+                          speaker_id: params[:speaker_id]
                           )
 
     if @meeting.save
@@ -47,6 +48,7 @@ class Api::MeetingsController < ApplicationController
     @meeting.time = params[:time] || @meeting.time
     @meeting.location = params[:location] || @meeting.location
     @meeting.remote = params[:remote] || @meeting.remote
+    @meeting.speaker_id = params[:speaker_id] || @meeting.speaker_id
     
     if @meeting.save
       render 'show.json.jbuilder'
