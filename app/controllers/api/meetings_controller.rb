@@ -53,7 +53,7 @@ class Api::MeetingsController < ApplicationController
     
     if @meeting.save
       render 'show.json.jbuilder'
-    elsif 
+    elsif
       render json: {errors: @meeting.errors.full_messages}, status: :unprocessable_entity
     end
 
