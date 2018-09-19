@@ -10,5 +10,7 @@ class Meeting < ApplicationRecord
   # validates :location, presence: true
 
   belongs_to :speaker
+  has_many :meeting_topics
+  has_many :topics, through: :meeting_topics
 
 end
